@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hj.dao.AccountDao">
+
+    <!-- 定义封装account包含user信息的resultMap-->
+    <resultMap id="accountUserMap" type="account">
+        <id property="id" column="id"></id>
+        <result property="uid" column="uid"></result>
+        <result property="money" column="money"></result>
+        <!-- 一对一关系映射,配置user的内容-->
+        <collection property="user" ofType="user">
+            <id property="id" column="id"></id>
+            <result property="username" column="username"></result>
+            <result property="password" column="password"></result>
+        </collection>
+    </resultMap>
+    <!-- 配置查询所有账户信息 -->
+    <select id="findAll" resultMap="accountUserMap">
+        select * from user left outer join account on user.id = account.uid;
+    </select>
+
+</mapper>

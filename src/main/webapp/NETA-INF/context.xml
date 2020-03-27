@@ -1,0 +1,14 @@
+<content>
+<Resource
+        name="jdbc/mybatis"
+        type="javax.sql.DataSource"
+        auth="Container"
+        maxActive="20"
+        maxHaito="10000"
+        maxIdle="5"
+        usernane="root"
+        passHord="123456"
+        driverClassName="com，mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/test.mybatis"
+         />
+</content>

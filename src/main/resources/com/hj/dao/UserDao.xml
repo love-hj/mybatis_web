@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hj.dao.UserDao">
+
+    <!-- 定义封装user的resultMap-->
+    <resultMap id="userMap" type="user">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="password" column="password"></result>
+        <!-- 配置user对象中account的内容-->
+
+        <!-- 配置user对象中role的内容-->
+        <collection property="roles" ofType="role">
+            <id property="roleId" column="roleId"></id>
+            <result property="roleName" column="roleName"></result>
+            <result property="roleSex" column="roleSex"></result>
+        </collection>
+    </resultMap>
+    <!-- 配置查询所有 -->
+    <select id="findAll" resultMap="userMap">
+        SELECT * FROM USER
+        LEFT OUTER JOIN role_user ON user.id = role_user.uId
+        LEFT OUTER JOIN role ON role_user.rId = role.roleId;
+    </select>
+    <!-- 保存用户-->
+    <insert id="saveUser" parameterType="com.hj.domain.User">
+        <!-- 插入用户的时候获取插入用户的id-->
+        <selectKey keyProperty="id" keyColumn="id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        insert into user (username,password) values (#{username},#{password});
+    </insert>
+    <!-- 更新用户-->
+    <update id="updateUser" parameterType="com.hj.domain.User">
+        update user set username=#{username},password=#{password} where id=#{id};
+    </update>
+    <!-- 删除用户-->
+    <delete id="deleteUser" parameterType="Integer">
+        delete from user where id=#{id};
+    </delete>
+    <!-- 通过id查询单个用户-->
+    <select id="selectSingleUser" parameterType="Integer" resultType="com.hj.domain.User">
+        select * from user where id=#{id};
+    </select>
+    <!-- 通过name模糊查询多个用户-->
+    <select id="selectNameUser" parameterType="string" resultType="com.hj.domain.User">
+        select * from user where username  like #{name};
+    </select>
+    <!-- 查询用户个数-->
+    <select id="selectTotalUser"  resultType="int">
+        select count(id) from user;
+    </select>
+    <!-- 通过queryvo模糊查询多个用户-->
+    <select id="selectQueryVoUser" parameterType="com.hj.domain.QueryVo" resultType="com.hj.domain.User">
+        select * from user where username like #{user.username};
+    </select>
+    <!-- 通过sql动态语句查询多个用户-->
+    <select id="selectQueryVoIdUser" parameterType="com.hj.domain.QueryVo" resultType="com.hj.domain.User">
+        select * from user
+        <where>
+            <if test="ids != null and ids.size()>0">
+                <foreach collection="ids" open="and id in (" close=")" item="id" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

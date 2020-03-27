@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- bean definitions here -->
+    <!-- 配置service
+         id:用于从spring获取实例使用
+         class:需要创建实例的全限定类名
+    -->
+    <bean id="UserServiceId" class="com.hj.implement.UserServiceImp"></bean>
+
+    <!--
+    <property>用于进行属性注入
+        name: bean的属性名，通过setter方法获得
+        setBookDao ##> BookDao ##> bookDao
+        ref :另一个bean的id值的引用
+     -->
+    <!-- 配置BookService-->
+    <bean id="BookServiceId" class="com.hj.implement.BookServiceImpl">
+
+        <property name="bookDao" ref="BookDaoId"></property>
+    </bean>
+    <!-- 配置BookDao-->
+    <bean id="BookDaoId" class="com.hj.implement.BookDaoImpl"></bean>
+</beans>
